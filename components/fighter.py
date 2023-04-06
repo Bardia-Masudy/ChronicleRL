@@ -3,6 +3,8 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from components.base_component import BaseComponent
+from input_handlers import GameOverEventHandler
+from render_order import RenderOrder
 
 if TYPE_CHECKING:
     from entity import Actor
@@ -29,6 +31,7 @@ class Fighter(BaseComponent):
     def die(self) -> None:
         if self.engine.player is self.entity:
             death_message = "You died!"
+            self.engine.event_handler = GameOverEventHandler(self.engine)
         else:
             death_message = f"The {self.entity.name} dies!"
         
@@ -37,6 +40,7 @@ class Fighter(BaseComponent):
         self.entity.blocks_movement = False
         self.entity.ai = None
         self.entity.name = f"remains of {self.entity.name}"
+        self.entity.render_order = RenderOrder.CORPSE
         
         self.entity.gamemap.tiles[self.entity.x, self.entity.y][2][2]  = [96, 7, 105] # Change "dark" colour of floor underneath.
         self.entity.gamemap.tiles[self.entity.x, self.entity.y][3][2]  = [207, 55, 35] # Change "light" colour of floor underneath.
