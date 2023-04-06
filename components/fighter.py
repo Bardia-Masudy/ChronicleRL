@@ -33,9 +33,12 @@ class Fighter(BaseComponent):
             death_message = f"The {self.entity.name} dies!"
         
         self.entity.char = "%"
-        self.entity.colour = (191, 0, 0)
+        self.entity.colour = (194, 192, 192)
         self.entity.blocks_movement = False
         self.entity.ai = None
         self.entity.name = f"remains of {self.entity.name}"
-
+        
+        self.entity.gamemap.tiles[self.entity.x, self.entity.y][2][2]  = [96, 7, 105] # Change "dark" colour of floor underneath.
+        self.entity.gamemap.tiles[self.entity.x, self.entity.y][3][2]  = [207, 55, 35] # Change "light" colour of floor underneath.
+        
         print(death_message)

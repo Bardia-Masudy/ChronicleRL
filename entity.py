@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import copy
-from typing import Optional, Tuple, Type, TypeVar, TYPE_CHECKING
+from typing import Optional, Type, TypeVar, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from components.ai import BaseAI
@@ -23,7 +23,7 @@ class Entity:
             x: int = 0, 
             y: int = 0, 
             char: str = "?", 
-            colour: Tuple[int, int, int] = (255, 255, 255),
+            colour: tuple[int, int, int] = (255, 255, 255),
             name: str = "<Unnamed>",
             blocks_movement: bool = False
         ):
@@ -35,7 +35,7 @@ class Entity:
         self.blocks_movement = blocks_movement
         if gamemap:
             # if gamemap isn't provided now, it'll be set later
-            self.gamemape = gamemap
+            self.gamemap = gamemap
             gamemap.entities.add(self)
 
     def spawn(self: T, gamemap: GameMap, x: int, y: int) -> T:
@@ -67,7 +67,7 @@ class Actor(Entity):
             x: int = 0,
             y: int = 0,
             char: str = "?",
-            colour: Tuple[int, int, int] = (255, 255, 255),
+            colour: tuple[int, int, int] = (255, 255, 255),
             name: str = "<Unnamed>",
             ai_cls: Type[BaseAI],
             fighter: Fighter

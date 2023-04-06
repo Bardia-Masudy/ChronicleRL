@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Optional, Tuple, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from engine import Engine
@@ -37,7 +37,7 @@ class ActionWithDirection(Action):
         self.dy = dy
     
     @property
-    def dest_xy(self) -> Tuple[int, int]:
+    def dest_xy(self) -> tuple[int, int]:
         """Return this action's destination."""
         return self.entity.x + self.dx, self.entity.y + self.dy
     
