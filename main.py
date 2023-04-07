@@ -3,6 +3,7 @@ import tcod
 import copy
 
 #import objects and classes from outside main.py
+import colour
 from engine import Engine
 import entity_factories
 from procgen import generate_dungeon
@@ -13,7 +14,7 @@ def main()-> None:
     screen_height = 50
 
     map_width = 80
-    map_height = 50
+    map_height = 43
 
     room_max_size = 10
     room_min_size = 6
@@ -29,6 +30,10 @@ def main()-> None:
     player = copy.deepcopy(entity_factories.player)
 
     engine = Engine(player=player)
+
+    engine.message_log.add_message(
+        "Drawn by its mysteries, you enter Zerksoth's Tomb. The doors slam shut behind you.", colour.welcome_text
+    )
 
     engine.game_map = generate_dungeon(
         max_rooms = max_rooms,
@@ -55,10 +60,12 @@ def main()-> None:
         ## MAIN GAME LOOP
         while True:
             # add entities to console
-            engine.render(console=root_console, context=context)
+            root_console.clear()
+            engine.event_handler.on_render(console=root_console)
+            context.present(root_console)
 
             # handle all events
-            engine.event_handler.handle_events()
+            engine.event_handler.handle_events(context)
 
 if __name__ == "__main__":
     main()
