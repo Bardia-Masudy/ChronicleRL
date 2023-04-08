@@ -11,7 +11,7 @@ import tile_types
 if TYPE_CHECKING:
     from engine import Engine
     from entity import Entity
-
+    
 class GameMap:
     def __init__(
             self, engine: Engine, width: int, height: int, entities: Iterable[Entity] = ()

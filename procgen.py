@@ -4,6 +4,7 @@ from typing import Iterator, TYPE_CHECKING
 import random
 
 import tcod
+from numpy.typing import NDArray
 
 if TYPE_CHECKING:
     from engine import Engine
@@ -11,6 +12,7 @@ if TYPE_CHECKING:
 
 import entity_factories
 from game_map import GameMap
+from sound_map import SoundMap
 import tile_types
 
 class RectangularRoom:
@@ -122,3 +124,6 @@ def generate_dungeon(
         rooms.append(new_room)
     
     return dungeon
+
+def generate_sound_map(array: NDArray, engine: Engine) -> SoundMap:
+    return SoundMap(array, engine)

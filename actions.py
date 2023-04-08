@@ -91,6 +91,7 @@ class MovementAction(ActionWithDirection):
         if self.engine.game_map.get_blocking_entity_at_location(dest_x, dest_y):
             raise exceptions.Impossible("That way is blocked.") # Blocked by non-walkable entity
         
+        self.entity.gamemap.engine.sound_map.add_node((9,(self.entity.x, self.entity.y))) # Movment sound WIP
         self.entity.move(self.dx, self.dy)
 class BumpAction(ActionWithDirection):
     def perform(self) -> None:

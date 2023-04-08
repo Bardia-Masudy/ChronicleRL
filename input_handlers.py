@@ -65,6 +65,8 @@ class EventHandler(tcod.event.EventDispatch[Action]):
         """Handle actions returned from event methods.
         Returns True if te action will advance a turn.
         """
+        self.engine.sound_map.update_costs()
+        
         if action is None:
             return False
         
@@ -74,6 +76,8 @@ class EventHandler(tcod.event.EventDispatch[Action]):
             self.engine.message_log.add_message(exc.args[0], colour.impossible)
             return False # Skip enemy turn on exceptions
         
+        self.engine.sound_map.handle_player()
+
         self.engine.handle_enemy_turns()
         
         self.engine.update_fov()

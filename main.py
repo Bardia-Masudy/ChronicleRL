@@ -7,7 +7,7 @@ import traceback
 import colour
 from engine import Engine
 import entity_factories
-from procgen import generate_dungeon
+from procgen import generate_dungeon, generate_sound_map
 
 def main()-> None:
     #to be included in a json file later
@@ -45,6 +45,12 @@ def main()-> None:
         max_monsters_per_room = max_monsters_per_room,
         engine = engine
     )
+
+    engine.sound_map = generate_sound_map(
+        array= engine.game_map.tiles, 
+        engine= engine
+    )
+
     engine.update_fov()
 
     #creates context for console
