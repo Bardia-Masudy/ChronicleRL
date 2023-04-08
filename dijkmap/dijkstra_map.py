@@ -12,11 +12,14 @@ test_dungeon = generate_dungeon(
 
 class SoundMap:
     def __init__(self, closed_map: NDArray):
-        self.height, self.width = closed_map.shape
         self.neighbours = set()
-        # tile map corresponding to where stimulus can travel (smell, sound, etc.)
-        self.tiles = np.full((self.height, self.width), fill_value= -1)
-        self.tiles[np.where(closed_map == "#")] = 0 # Open
+        
+        # tile map tracking strength of stimulus
+        self.tiles = np.full((closed_map.shape), fill_value= 0)
+
+        # tile map corresponding to how easily stimulus can travelover tiles. (1-9 where 9 is total blocking)
+        self.closed = np.full((closed_map.shape), fill_value= 9)
+        self.closed[np.where(closed_map == "#")] = 1 # Base level of impedence
 
     def render(self) -> None:
         print(np.matrix(self.tiles))
@@ -27,22 +30,21 @@ class SoundMap:
 
     def process_nodes(self) -> None:
         while self.neighbours:
-            new_neighbours = set()
-            for tile in self.neighbours:
-                x, y = tile
-                intensity = self.tiles[tile]
-                if intensity > 1:
-                    for i in [x-1, x, x+1]:
-                        for j in [y-1, y, y+1]:
-                            #test for in-bounds here too
-                            if (i, j) != (x, y) and intensity > self.tiles[(i, j)] > -1:
-                                self.tiles[(i, j)] = intensity - 1
-                                new_neighbours.add((i, j))
-                self.neighbours = new_neighbours
+            tile = self.neighbours.pop()
+            x, y = tile
+            intensity = self.tiles[tile]
+            if intensity > 1:
+                for neighbour in [  (x-1, y-1), (x  , y-1), (x+1, y-1),
+                                    (x-1, y  ),             (x+1, y  ),
+                                    (x-1, y+1), (x  , y+1), (x+1, y+1)]:
+                    new_intensity = max(0, intensity - self.closed[neighbour])
+                    #test for in-bounds here too
+                    if intensity > self.tiles[neighbour] > -1:
+                        self.tiles[neighbour] = new_intensity
+                        self.neighbours.add(neighbour)
     
-    def can_feel(self, target: tuple[int, int], start: tuple[int, int], distance: int) -> bool:
-        pass
-        #stimulus_map = self.process_node()
+    def can_feel(self, start: tuple[int, int]) -> bool:
+        return self.tiles[start] > 0
 
 
 testmap = SoundMap(test_dungeon.tiles)
