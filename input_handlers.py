@@ -13,6 +13,7 @@ from actions import (
     Action, 
     EscapeAction, 
     BumpAction, 
+    PickupAction,
     WaitAction
 )
 
@@ -115,6 +116,9 @@ class MainGameEventHandler(EventHandler):
         
         elif key == tcod.event.K_v:
             self.engine.event_handler = HistoryViewer(self.engine)
+        
+        elif key == tcod.event.K_g:
+            action = PickupAction(player)
         
         # No valid keys returned
         return action
