@@ -59,18 +59,17 @@ class ItemAction(Action):
             target_xy = entity.x, entity.y
         self.target_xy = target_xy
 
-        @property
-        def target_actor(self) -> Optional[Actor]:
-            """Return the actor at this actions destination."""
-            return self.engine.game_map.get_actor_at_location(*self.target_xy)
-        
-        def perform(self) -> None:
-            """Invoke the items ability, this action will be given to provide context."""
-            self.item.consumable.activate(self)
-class EscapeAction(Action):
+    @property
+    def target_actor(self) -> Optional[Actor]:
+        """Return the actor at this actions destination."""
+        return self.engine.game_map.get_actor_at_location(*self.target_xy)
+    
     def perform(self) -> None:
-        raise SystemExit()
-
+        """Invoke the items ability, this action will be given to provide context."""
+        self.item.consumable.activate(self)    
+class DropItem(ItemAction):
+    def perform(self) -> None:
+        self.entity.inventory.drop(self.item)
 class WaitAction(Action):
     def perform(self) -> None:
         pass
