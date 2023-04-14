@@ -1,5 +1,5 @@
 from components.ai import HostileEnemy
-from components.consumable import HealingConsumable
+from components import consumable
 from components.fighter import Fighter
 from components.inventory import Inventory
 from entity import Actor, Item
@@ -37,5 +37,26 @@ health_potion = Item(
     char="!",
     colour=(127, 0, 255),
     name="Health Potion",
-    consumable=HealingConsumable(amount=4)
+    consumable=consumable.HealingConsumable(amount=4)
+)
+
+lighting_scroll = Item(
+    char = "~",
+    colour = (255, 255, 0),
+    name = "Lightning Scroll",
+    consumable = consumable.LightningDamageConsumable(damage=20, max_range=5)
+)
+
+confusion_scroll = Item(
+    char="~",
+    colour=(207, 63, 255),
+    name="Confusion Scroll",
+    consumable=consumable.ConfusionConsumable(duration=10)
+)
+
+fireball_scroll = Item(
+    char="~",
+    colour=(255, 0, 0),
+    name="Fireball Scroll",
+    consumable=consumable.FireballDamageConsumable(damage=12, radius=3)
 )
