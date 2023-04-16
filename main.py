@@ -7,6 +7,8 @@ import traceback
 import colour
 from engine import Engine
 import entity_factories
+import exceptions
+import input_handlers
 from procgen import generate_dungeon, generate_sound_map
 
 def main()-> None:
@@ -55,6 +57,8 @@ def main()-> None:
 
     engine.update_fov()
 
+    handler: input_handlers.BaseEventHandler = input_handlers.MainGameEventHandler(engine)
+
     #creates context for console
     with tcod.context.new_terminal(
         screen_width,
@@ -67,20 +71,33 @@ def main()-> None:
         root_console = tcod.Console(screen_width, screen_height, order="F")
         
         ## MAIN GAME LOOP
-        while True:
-            # add entities to console
-            root_console.clear()
-            engine.event_handler.on_render(console=root_console)
-            context.present(root_console)
+        try:
+            while True:
+                root_console.clear()
+                handler.on_render(console=root_console)
+                context.present(root_console)
 
-            try:
-                for event in tcod.event.wait():
-                    context.convert_event(event)
-                    engine.event_handler.handle_events(event)
-            except Exception: # Handle exceptions in game
-                traceback.print_exc() #print error to stderr
-                # Then print error to message log.
-                engine.message_log.add_message(traceback.format_exc(), colour.error)
+                try:
+                    for event in tcod.event.wait():
+                        context.convert_event(event)
+                        handler = handler.handle_events(event)
+                except Exception: # Handle exceptions in game
+                    traceback.print_exc() #print error to stderr
+                    # Then print error to message log.
+                    if isinstance(handler, input_handlers.EventHandler):
+                        handler.engine.message_log.add_message(
+                            traceback.format_exc(), colour.error
+                        )
+                    engine.message_log.add_message(
+                        traceback.format_exc(), colour.error
+                    )
+        except exceptions.QuitWithoutSaving:
+            raise
+        except SystemExit: # Save and exit.
+            raise # TODO: save function here
+        except BaseException: # Save on any other unexpected exception
+            raise # TODO: save function here
+
 
 if __name__ == "__main__":
     main()
