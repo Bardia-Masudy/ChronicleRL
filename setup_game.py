@@ -2,6 +2,9 @@
 from __future__ import annotations
 
 import copy
+import lzma
+import pickle
+import traceback
 from typing import Optional
 
 import tcod
@@ -58,6 +61,12 @@ def new_game() -> Engine:
     
     return engine
 
+def load_game(filename: str) -> Engine:
+    """Load an Engine instance from a file."""
+    with open(filename, "rb") as file:
+        engine = pickle.loads(lzma.decompress(file.read()))
+    assert isinstance(engine, Engine)
+    return engine
 class MainMenu(input_handlers.BaseEventHandler):
     """Handle main menu rendering and input."""
 
@@ -101,8 +110,13 @@ class MainMenu(input_handlers.BaseEventHandler):
         if event.sym in (tcod.event.K_q, tcod.event.K_ESCAPE):
             raise SystemExit()
         elif event.sym == tcod.event.K_c:
-            # TODO: Load game here
-            pass
+            try:
+                return input_handlers.MainGameEventHandler(load_game("savegame.sav"))
+            except FileNotFoundError:
+                return input_handlers.PopupMessage(self, "No saved game to load.")
+            except Exception as exc:
+                traceback.print_exc() #print to stderr.
+                return input_handlers.PopupMessage(self, f"Failed to load save:\n{exc}")
         elif event.sym == tcod.event.K_n:
             return input_handlers.MainGameEventHandler(new_game())
     
