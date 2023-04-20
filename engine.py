@@ -8,16 +8,17 @@ from tcod.console import Console
 from tcod.map import compute_fov
 
 import exceptions
-from render_functions import render_bar, render_names_at_mouse_location
+import render_functions as rend
 from message_log import MessageLog
 
 if TYPE_CHECKING:
     from entity import Actor
-    from game_map import GameMap
+    from game_map import GameMap, GameWorld
 
 ## Engine responsible for drawing map and entities, as well as handling player input.
 class Engine:
     gamemap: GameMap
+    game_world: GameWorld
 
     def __init__(self, player: Actor):
         self.message_log = MessageLog()
@@ -47,14 +48,25 @@ class Engine:
 
         self.message_log.render(console=console, x=21, y=45, width=40, height=5)
 
-        render_bar(
+        rend.render_bar(
             console=console,
             current_value=self.player.fighter.hp,
             max_value=self.player.fighter.max_hp,
             total_width=20
         )
 
-        render_names_at_mouse_location(console=console, x=21, y=44, engine=self)
+        rend.render_dungeon_level(
+            console=console,
+            dungeon_level= self.game_world.current_floor,
+            location=(0, 47)
+        )
+
+        rend.render_names_at_mouse_location(
+            console=console, 
+            x=21, 
+            y=44, 
+            engine=self
+        )
 
     def save_as(self, filename: str) -> None:
         """Save this Engine object as a compressed file."""

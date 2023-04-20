@@ -133,7 +133,6 @@ class EventHandler(BaseEventHandler):
         """Handle actions returned from event methods.
         Returns True if te action will advance a turn.
         """
-        self.engine.sound_map.update_costs()
         
         if action is None:
             return False
@@ -143,8 +142,6 @@ class EventHandler(BaseEventHandler):
         except exceptions.Impossible as exc:
             self.engine.message_log.add_message(exc.args[0], colour.impossible)
             return False # Skip enemy turn on exceptions
-        
-        self.engine.sound_map.handle_player()
 
         self.engine.handle_enemy_turns()
         
@@ -164,8 +161,15 @@ class MainGameEventHandler(EventHandler):
 
         #store symbol of key pressed
         key = event.sym
+        modifier = event.mod
 
         player = self.engine.player
+
+        if key == tcod.event.K_PERIOD and modifier & (
+            tcod.event.KMOD_LSHIFT | tcod.event.KMOD_RSHIFT
+        ):
+            return actions.TakeStairsAction(player)
+
 
         # Movement and Waiting
         if key in MOVE_KEYS:

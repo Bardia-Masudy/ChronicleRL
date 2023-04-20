@@ -38,6 +38,14 @@ def render_bar(
         x=1, y=45, string=f"HP: {current_value}/{max_value}"
     )
 
+def render_dungeon_level(
+    console: Console, dungeon_level: int, location: tuple[int, int]
+):
+    """Render the level the player is currently on, at the given location."""
+    x, y = location
+
+    console.print(x=x, y=y, string=f"Dungeon Level: {dungeon_level}")
+
 def render_names_at_mouse_location(
        console: Console, x: int, y: int, engine: Engine 
 ) -> None:

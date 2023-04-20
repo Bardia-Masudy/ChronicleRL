@@ -91,7 +91,7 @@ class HostileEnemy(BaseAI):
         dy = target.y - self.entity.y
         distance = max(abs(dx), abs(dy)) # Chebyshev distance.
 
-        if self.engine.game_map.visible[self.entity.x, self.entity.y] or self.engine.sound_map.can_feel((self.entity.x, self.entity.y)):
+        if self.engine.game_map.visible[self.entity.x, self.entity.y]:
             if distance <= 1:
                 return MeleeAction(self.entity, dx, dy).perform()
             
