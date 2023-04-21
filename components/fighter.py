@@ -65,3 +65,5 @@ class Fighter(BaseComponent):
         self.parent.gamemap.tiles[self.parent.x, self.parent.y][3][2]  = [207, 55, 35] # Change "light" colour of floor underneath.
         
         self.engine.message_log.add_message(death_message, death_message_colour)
+        
+        self.engine.player.level.add_xp(self.parent.level.xp_given)
