@@ -71,5 +71,5 @@ class Level(BaseComponent):
 
         self.engine.message_log.add_message("You feel more agile!")
 
-        self.increase_level
+        self.increase_level()
     
