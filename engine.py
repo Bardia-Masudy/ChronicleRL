@@ -38,7 +38,7 @@ class Engine:
         self.game_map.visible[:] = compute_fov(
             self.game_map.tiles["transparent"],
             (self.player.x, self.player.y),
-            radius=8 # Space to use different algorithm, maybe FOV_DIAMOND or FOV_SHADOW?
+            radius=40 # Space to use different algorithm, maybe FOV_DIAMOND or FOV_SHADOW?
         )
         # If a tile is visible, it should be added to "explored"
         self.game_map.explored |= self.game_map.visible

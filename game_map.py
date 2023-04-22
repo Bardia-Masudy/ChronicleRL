@@ -6,6 +6,7 @@ import numpy as np
 from tcod.console import Console
 
 from entity import Actor, Item
+from lightmap import LightMap
 import tile_types
 
 if TYPE_CHECKING:
@@ -19,6 +20,7 @@ class GameMap:
         self.engine = engine
         self.width, self.height = width, height
         self.entities = set(entities)
+        
         self.tiles = np.full((width, height), fill_value=tile_types.wall, order="F")
 
         self.visible = np.full(
@@ -30,6 +32,9 @@ class GameMap:
         ) # Tiles player has seen before
 
         self.downstairs_xy = (0,0)
+
+        self.lightmap = LightMap(width, height)
+        self.lightmap.parent = self
 
     @property
     def gamemap(self) -> GameMap:

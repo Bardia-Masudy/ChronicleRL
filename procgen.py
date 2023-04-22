@@ -193,5 +193,7 @@ def generate_dungeon(
 
         #Append new room to list
         rooms.append(new_room)
+
+    dungeon.lightmap.update_map()
     
     return dungeon

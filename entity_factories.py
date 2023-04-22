@@ -3,6 +3,7 @@ from components import consumable
 from components.fighter import Fighter
 from components.inventory import Inventory
 from components.level import Level
+from components.light import Light
 from entity import Actor, Item
 
 # entity = Entity(char="CHAR", colour=(R, G, B), name="STRING", blocks_movement=bool)
@@ -14,7 +15,8 @@ player = Actor(
     ai_cls=HostileEnemy,
     fighter=Fighter(hp=30, defense=2, power=5),
     inventory=Inventory(capacity = 26),
-    level=Level(level_up_base=200)
+    level=Level(level_up_base=200),
+    light=Light(radius=8)
     )
 
 orc = Actor(
@@ -24,7 +26,8 @@ orc = Actor(
     ai_cls=HostileEnemy,
     fighter=Fighter(hp=16, defense=1, power=4),
     inventory=Inventory(capacity = 0),
-    level=Level(xp_given=100)
+    level=Level(xp_given=100),
+    light=Light(radius=4)
     )
 
 goblin = Actor(
@@ -34,7 +37,8 @@ goblin = Actor(
     ai_cls=HostileEnemy,
     fighter=Fighter(hp=10, defense=0, power=3),
     inventory=Inventory(capacity = 0),
-    level=Level(xp_given=35)
+    level=Level(xp_given=35),
+    light=Light(radius=0)
     )
 
 health_potion = Item(

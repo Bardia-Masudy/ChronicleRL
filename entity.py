@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from components.fighter import Fighter
     from components.inventory import Inventory
     from components.level import Level
+    from components.light import Light
     from game_map import GameMap
 
 T = TypeVar("T", bound="Entity")
@@ -57,6 +58,10 @@ class Entity:
         clone.y = y
         clone.parent = gamemap
         gamemap.entities.add(clone)
+
+        if clone.light:
+            clone.light.add_location()
+
         return clone
 
     def place(self, x:int, y:int, gamemap: Optional[GameMap]) -> None:
@@ -91,7 +96,8 @@ class Actor(Entity):
             ai_cls: Type[BaseAI],
             fighter: Fighter,
             inventory: Inventory,
-            level: Level
+            level: Level,
+            light: Light
     ): 
         super().__init__(
             x=x,
@@ -113,6 +119,9 @@ class Actor(Entity):
 
         self.level = level
         self.level.parent = self
+
+        self.light = light
+        self.light.parent = self
 
     @property
     def is_alive(self) -> bool:
